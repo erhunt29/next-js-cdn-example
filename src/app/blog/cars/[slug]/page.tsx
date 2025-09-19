@@ -2,10 +2,13 @@ import Link from "next/link";
 import { getCars } from "../utils";
 import Title from "antd/es/typography/Title";
 import Text from "antd/es/typography/Text";
+import Image from "next/image";
 import { Divider } from "antd";
 
-async function generateStaticParams() {
-  return (await getCars()).map((item) => item.id);
+export async function generateStaticParams() {
+  return (await getCars()).map((item) => ({
+    slug: item.id,
+  }));
 }
 
 interface Props {
@@ -26,6 +29,14 @@ export default async function Page({ params }: Props) {
       <Title>
         {car.manufacturer} {car.model}
       </Title>
+      <Image
+        width={400}
+        height={300}
+        src={`/images/cars/${car.id}.jpg`}
+        alt="car image"
+      />
+      <br />
+      <br />
       <Text>{car.description}</Text>
     </div>
   );

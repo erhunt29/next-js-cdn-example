@@ -4,5 +4,15 @@ import { NextResponse, NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const debugToken = request.headers.get("x-debug-token");
   if (debugToken) console.log({ debugToken });
-  return NextResponse.next();
+
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-middleware-date", new Date().toISOString());
+
+  // You can also set request headers in NextResponse.rewrite
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
+  return response;
 }
